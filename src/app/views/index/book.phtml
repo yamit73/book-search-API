@@ -1,0 +1,58 @@
+<div class="container mt-3">
+    <h1 class="text-center text-success">Book details</h1>
+    <div id="header" class="row mt-xl-5">
+        <div class="col">
+            <img src="//covers.openlibrary.org/b/olid/<?php echo $book['img_id'] ?>.jpg" width="100%" height="450px" class="rounded">
+        </div>
+        <div class="col">
+            <h3><?php echo $book['title'] ?></h3>
+            <div class="clearfix">
+                <span class="float-start"><strong>Edition: </strong><?php echo $book['edition_name'] ?? "latest" ?></span>
+            </div>
+            <div class="mt-2">
+                <div id="sku" class="mt-2">
+                    <p class="float-left d-inline h6">No of pages:</p>
+                    <p class="float-left d-inline txt-size text-primary"><?php echo $book['number_of_pages'] ?? ""; ?></p>
+                </div>
+                <div id="category" class="mt-1">
+                    <p class="float-left d-inline h6">Publish Date:</p>
+                    <p class="float-left d-inline txt-size text-primary"><?php echo $book['publish_date'] ?? "";; ?></p>
+                </div>
+                <div id="tag" class="mt-1">
+                    <p class="float-left d-inline h6">Paper type:</p>
+                    <p class="float-left d-inline txt-size text-primary"><?php echo $book['physical_format'] ?? "paperback"; ?></p>
+                </div>
+                <div id="tag" class="mt-1">
+                    <p class="float-left d-inline h6">Latest revision:</p>
+                    <p class="float-left d-inline txt-size text-primary"><?php echo $book['latest_revision'] ?? "1";; ?></p>
+                </div>
+                <div id="tag" class="mt-1">
+                    <p class="float-left d-inline h6">Authors:</p>
+                    <p class="float-left d-inline txt-size text-primary">
+                        <?php
+                        if(isset($book['authors'])) {
+                            foreach($book['authors'] as $author) {
+                                echo $author['name'].', ';
+                            }
+                        }
+                        ?>
+                    </p>
+                </div>
+                <div id="tag" class="mt-1">
+                    <p class="float-left d-inline h6">Publishers:</p>
+                    <p class="float-left d-inline txt-size text-primary">
+                        <?php
+                        if (isset($book['publishers'])) {
+                            foreach($book['publishers'] as $publisher) {
+                                echo $publisher.', ';
+                            }
+                        }
+                        ?>
+                    </p>
+                </div>
+                <?php echo isset($book['identifiers']['google']) ? '<a href="https://www.google.co.in/books/edition/'.urlencode($book['title']).'/'.$book['identifiers']['google'][0].'?hl=en" class="btn btn-info">See on google</a>' : ''; ?>
+                
+            </div>
+        </div>
+    </div>
+</div>

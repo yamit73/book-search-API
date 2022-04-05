@@ -1,0 +1,42 @@
+<div class="text-center">
+<?php
+echo '<h1 class="text-info text-center">Search Books</h1>';
+echo $this->tag->form('');
+echo $this->tag->textField(
+    [
+        "search",
+        'class'=>"form-control w-25 d-inline",
+        'placeholder' => 'Enter book name'
+    ]
+);
+echo $this->tag->submitButton(['Search', 'class'=>"btn btn-primary mx-2"]);
+?>
+</form>
+</div>
+<hr>
+<?php
+echo "<h3 class='text-center text-warning'>Total ".$books['numFound']." Result found</h3>";
+echo'<div class="container">';
+foreach($books['docs'] as $book) {
+    echo '<div class="card mb-3 mx-2" style="max-width: 800px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="//covers.openlibrary.org/b/olid/'.$book['cover_edition_key'].'.jpg" style="max-height:230px !important;" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md">
+                        <div class="card-body">
+                            <h5 class="card-title">'.$book['title'].'</h5>
+                            <p class="card-text">By, '.implode(', ',$book['author_name']).'</p>
+                            <small class="text-muted">First published in: '.$book['first_publish_year'].'</small><br>
+                            <small class="text-muted">Publisher: '.$book['publisher'][0].'</small><br>
+                            <small class="text-muted">Subjects: '.$book['subject'][0].'</small><br>
+                            <a class="btn btn-primary mt-1" href="index/book/'.$book['isbn'][0].'?imgId='.$book['cover_edition_key'].'"> Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+}
+echo '</div>';
+echo '<pre>';
+print_r($books);
+//olid
