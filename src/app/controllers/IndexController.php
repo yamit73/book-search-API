@@ -1,6 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Controller;
+use GuzzleHttp\Client;
 /**
  * Class to simple use of API
  */
@@ -15,16 +16,13 @@ class IndexController extends Controller
     public function indexAction()
     {
         $bookName = urlencode($this->request->getPost('search'));
-        $url = "https://openlibrary.org/search.json?q=".$bookName."&mode=ebooks&has_fulltext=true";
         
-        // Initialize a CURL session.
-        $ch = curl_init();
-
-        //grab URL and pass it to the variable.
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $this->view->books=json_decode(curl_exec($ch), true);
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'https://openlibrary.org/',
+        ]);
+        $response=$client->request('GET', '/search.json?q='.$bookName.'&mode=ebooks&has_fulltext=true');
+        $this->view->books=json_decode($response->getBody(), true);
     }
     /**
      * Single book detail
@@ -35,21 +33,30 @@ class IndexController extends Controller
     public function bookAction($id)
     {
         //URL to hit
-        $url = "https://openlibrary.org/api/books?bibkeys=ISBN:".$id."&jscmd=details&format=json";
         $imgId=$this->request->getQuery('imgId');
-        // Initialize a CURL session.
-        $ch = curl_init();
-
-        //grab URL and pass it to the variable.
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'https://openlibrary.org/api/'
+        ]);
+        $response=$client->request('GET', '/books?bibkeys=ISBN:'.$id.'&jscmd=details&format=json');
         //Filtering data before sending to view page
         $key='ISBN:'.$id;
-        $book=json_decode(curl_exec($ch), true)[$key]['details'];
+        $book=json_decode($response->getBody(), true)[$key]['details'];
 
         //Adding extra key as image id recieved from url in data
         $book['img_id']=$imgId;
         $this->view->book=$book;
+    }
+    public function binAction()
+    {
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'http://httpbin.org/',
+            // You can set any number of default request options.
+        ]);
+        $response=$client->request('GET', '/get');
+        echo '<pre>';
+        echo($response->getBody());
+        die;
     }
 }

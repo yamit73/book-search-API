@@ -1,0 +1,19 @@
+<div class="text-center">
+    <?php
+    echo '<h1 class="text-warning text-center">Generate random image</h1>';
+    echo $this->tag->form('');
+        echo $this->tag->textField(
+            [
+                "search",
+                'class'=>"form-control w-25 d-inline",
+                'placeholder' => 'Enter number'
+            ]
+        );
+        echo $this->tag->submitButton(['Generate', 'class'=>"btn btn-primary mx-2"]);
+    ?>
+    </form>
+</div>
+<hr>
+<div class="card m-auto" style="width: 18rem;">
+    <img src="https://robohash.org/<?php echo $img; ?>.png?set=set2&size=300x300" class="card-img-top" alt="...">
+</div>
